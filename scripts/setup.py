@@ -1,4 +1,16 @@
-import time,os
+import time,os,sys
+
+pet = {
+	"name": None,
+	"type": None,
+	"normal": None,
+	"excited": None,
+	"health" : 100,
+	"maxhealth": 100,
+	"hunger" : 100,
+	"maxhunger" : 100,
+	"currentemo": "normal",
+}
 def emotionfiles(choice,emo):
 	files = []
 	giveemotion = []
@@ -23,3 +35,22 @@ def setuppet(choice):
 	os.system('clear')
 	return petname,choice,normal,excited
 
+
+def selected(pet, choice):
+	pet["name"],pet["type"],pet["normal"],pet["excited"] = setuppet(choice)
+
+def startsetup():
+	os.system('clear')
+	## menu make skip if not 1st run
+	print("Welcome. Thank you for adopting your 1st Virtual Pet!")
+	print("Choose an Animal:")
+	print("1. Dog , q. quit")
+	choice = input("Choice: ")
+	options = {
+		"1": selected(pet, "dog"),
+		"q": sys.exit,
+	}
+
+	options[choice]
+
+	return pet
