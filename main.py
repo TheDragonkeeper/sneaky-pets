@@ -9,6 +9,7 @@ from threading import Timer
 os.system('clear')
 
 pet = ""
+menuactive = 0
 if os.path.isfile("pet.json") == True:
 	with open('pet.json', "r") as json_file:
 		pet = json.load(json_file)
@@ -24,18 +25,34 @@ def guiloop():
 	while True:
 		gui.refresh(pet,pet["currentemo"],question)
 def resetinput():
+	global pet
 	global question
 	while True:
-		time.sleep(20)
-		userinputthread.terminate()
-		userinputthread.start()
-		question = 0
+		if pet["hunger"] > 0:
+			pet["hunger"] = pet["hunger"]-1
+		time.sleep(1)
+		pet["currentemo"] = "normal"
+#		userinputthread.terminate()
+#		userinputthread.start()
+		if pet["hunger"] == 0:
+			pet["health"] = pet["health"]-1
+
+		if pet["health"] <= 0:
+			userinputthread.terminate()
+			question = str(pet["name"]+" has Died")
+			time.sleep(5)
+			guithread.terminate()
+			return
 
 def userinput():
+	global menuactive
 	global question
+	global pet
 	while True:
-		waitingoninput = input("")
-		question = gui.menuinput(waitingoninput)
+#		waitingoninput = input("")
+#		if waitingoninput == "m" or waitingoninput == "M":
+#			menuitems = ['Feed', 'Play', 'Sleep', 'Exit']
+		gui.menu(pet)
 	
 threads = []
 
